@@ -55,7 +55,34 @@
 	var app = new _vue2.default({
 	  el: '#app',
 	  data: {
-	    message: 'Hello Vue! Hello world!'
+	    newTodo: '1',
+	    todoList: []
+	  },
+	  created: function created() {
+	    var _this = this;
+
+	    window.onbeforeunload = function () {
+	      var dataString = JSON.stringify(_this.todoList);
+	      window.localStorage.setItem('mytodo', dataString);
+	      alert(dataString);
+	    };
+	    var oldDataString = window.localStorage.getItem('mytodo');
+	    var oldData = JSON.parse(oldDataString);
+	    this.todoList = oldData || [];
+	  },
+	  methods: {
+	    addTodo: function addTodo() {
+	      this.todoList.push({
+	        title: this.newTodo,
+	        createdAt: new Date(),
+	        done: false
+	      });
+	      this.newTodo = '';
+	    },
+	    removeTodo: function removeTodo(todo) {
+	      var index = this.todoList.indexOf(todo);
+	      this.todoList.splice(index, 1);
+	    }
 	  }
 	});
 
